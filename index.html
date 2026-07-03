@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通讯录管理系统 - 演示首页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #4A90D9 0%, #2563EB 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+        }
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .nav-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .nav-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-color: #4A90D9;
+        }
+        .nav-item .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        .nav-item h3 {
+            color: #2C3E50;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .nav-item p {
+            color: #6c757d;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .nav-item a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .info-box {
+            background: #e8f4fd;
+            border-left: 4px solid #4A90D9;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 0 8px 8px 0;
+        }
+        .info-box h4 {
+            color: #4A90D9;
+            margin-bottom: 10px;
+        }
+        .info-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .info-box li {
+            padding: 8px 0;
+            color: #495057;
+            font-size: 14px;
+        }
+        .info-box li:before {
+            content: '✓ ';
+            color: #27ae60;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📒 通讯录管理系统</h1>
+            <p>Contact Management System Demo</p>
+        </div>
+        <div class="content">
+            <div class="nav-grid">
+                <div class="nav-item">
+                    <a href="web_demo.html">
+                        <div class="icon">🎯</div>
+                        <h3>交互式演示</h3>
+                        <p>完整的通讯录管理功能，支持添加、删除、查找、修改等操作</p>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="operation_demo.html">
+                        <div class="icon">📋</div>
+                        <h3>操作流程演示</h3>
+                        <p>详细的操作步骤说明和中文演示脚本</p>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="interface_demo.html">
+                        <div class="icon">🎨</div>
+                        <h3>界面设计演示</h3>
+                        <p>CLI界面颜色演示和GUI原型设计方案</p>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="data_demo.html">
+                        <div class="icon">📊</div>
+                        <h3>数据演示</h3>
+                        <p>示例数据、模糊搜索演示和文件格式验证</p>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="function_demo.html">
+                        <div class="icon">✅</div>
+                        <h3>功能演示重点</h3>
+                        <p>输入验证、自动保存和容量限制功能演示</p>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="contacts.txt" target="_blank">
+                        <div class="icon">📁</div>
+                        <h3>示例数据文件</h3>
+                        <p>10条联系人数据，可直接用于C++程序测试</p>
+                    </a>
+                </div>
+            </div>
+            <div class="info-box">
+                <h4>📦 项目打包信息</h4>
+                <ul>
+                    <li>项目根目录: d:\MyCppCode\demo_package</li>
+                    <li>构建工具: Vite</li>
+                    <li>执行 npm install 安装依赖</li>
+                    <li>执行 npm run build 打包项目</li>
+                    <li>打包产物: dist/ 目录</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
