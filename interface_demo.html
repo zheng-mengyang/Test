@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通讯录管理系统 - 界面设计与演示</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Microsoft YaHei', Arial, sans-serif; line-height: 1.8; color: #333; background: #f5f7fa; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px; border-radius: 12px; text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
+        .header p { opacity: 0.9; font-size: 14px; }
+        .nav { background: white; padding: 15px; border-radius: 8px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 10px; }
+        .nav ul li { padding: 8px 16px; background: #f0f4f8; border-radius: 20px; }
+        .nav ul li a { text-decoration: none; color: #667eea; font-weight: bold; font-size: 14px; }
+        .nav ul li a:hover { color: #764ba2; }
+        .section { background: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .section h2 { color: #667eea; font-size: 22px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #667eea; }
+        .section h3 { color: #2C3E50; font-size: 18px; margin: 25px 0 15px; }
+        .section h4 { color: #34495E; font-size: 16px; margin: 20px 0 10px; }
+        .code-block { background: #2C3E50; color: #ECF0F1; padding: 20px; border-radius: 8px; font-family: 'Consolas', 'Monaco', monospace; font-size: 14px; overflow-x: auto; margin: 15px 0; }
+        .code-block code { display: block; white-space: pre-wrap; }
+        .highlight { background: #FFF3CD; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+        .table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        .table th { background: #667eea; color: white; padding: 12px; text-align: left; font-weight: bold; }
+        .table td { padding: 12px; border-bottom: 1px solid #E8ECF0; }
+        .table tr:hover { background: #F8FAFC; }
+        .table tr:nth-child(even) { background: #F2F6FC; }
+        .note { background: #E8F5E9; border-left: 4px solid #4CAF50; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .warning { background: #FFF3E0; border-left: 4px solid #FF9800; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .tip { background: #E3F2FD; border-left: 4px solid #2196F3; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .color-box { display: inline-block; width: 40px; height: 40px; border-radius: 6px; margin-right: 10px; vertical-align: middle; }
+        .color-red { background: #D9534F; }
+        .color-green { background: #5CB85C; }
+        .color-yellow { background: #F0AD4E; }
+        .color-blue { background: #4A90D9; }
+        .color-cyan { background: #5BC0DE; }
+        .color-white { background: #FFFFFF; border: 1px solid #ddd; }
+        .color-dark { background: #2C3E50; }
+        .flowchart { background: #F8FAFC; padding: 20px; border-radius: 8px; margin: 15px 0; }
+        .flow-step { background: #4A90D9; color: white; padding: 10px 15px; border-radius: 6px; margin: 8px 0; text-align: center; }
+        .flow-arrow { text-align: center; color: #999; font-size: 20px; }
+        .btn-group { margin: 20px 0; }
+        .btn { display: inline-block; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; transition: all 0.3s ease; }
+        .btn-primary { background: #667eea; color: white; }
+        .btn-primary:hover { background: #764ba2; }
+        .btn-success { background: #4CAF50; color: white; }
+        .btn-success:hover { background: #43a047; }
+        .ascii-art { font-family: 'Consolas', monospace; white-space: pre; font-size: 12px; line-height: 1.4; color: #333; }
+        @media (max-width: 768px) {
+            .container { padding: 20px 15px; }
+            .header { padding: 25px; }
+            .header h1 { font-size: 22px; }
+            .section { padding: 20px; }
+            .nav ul { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 通讯录管理系统 - 界面设计与演示</h1>
+            <p>命令行界面彩色演示、GUI原型设计和界面交互流程图</p>
+        </div>
+
+        <div class="nav">
+            <ul>
+                <li><a href="#demo1">CLI彩色演示</a></li>
+                <li><a href="#demo2">GUI原型设计</a></li>
+                <li><a href="#demo3">交互流程图</a></li>
+                <li><a href="#demo4">优化建议</a></li>
+                <li><a href="web_demo.html" target="_blank">在线演示</a></li>
+            </ul>
+        </div>
+
+        <div class="section" id="demo1">
+            <h2>一、命令行界面(CLI)彩色演示</h2>
+            
+            <h3>1.1 ANSI颜色代码说明</h3>
+            <table class="table">
+                <tr><th>代码</th><th>颜色名称</th><th>显示效果</th><th>用途</th></tr>
+                <tr><td><span class="highlight">\x1B[31m</span></td><td>红色</td><td><span class="color-box color-red"></span></td><td>错误信息、警告</td></tr>
+                <tr><td><span class="highlight">\x1B[32m</span></td><td>绿色</td><td><span class="color-box color-green"></span></td><td>成功信息、菜单选项</td></tr>
+                <tr><td><span class="highlight">\x1B[33m</span></td><td>黄色</td><td><span class="color-box color-yellow"></span></td><td>提示信息</td></tr>
+                <tr><td><span class="highlight">\x1B[34m</span></td><td>蓝色</td><td><span class="color-box color-blue"></span></td><td>标题、强调</td></tr>
+                <tr><td><span class="highlight">\x1B[36m</span></td><td>青色</td><td><span class="color-box color-cyan"></span></td><td>输入提示</td></tr>
+                <tr><td><span class="highlight">\x1B[37m</span></td><td>白色</td><td><span class="color-box color-white"></span></td><td>默认文本</td></tr>
+                <tr><td><span class="highlight">\x1B[44m</span></td><td>蓝底</td><td><span class="color-box color-blue"></span></td><td>高亮背景</td></tr>
+                <tr><td><span class="highlight">\x1B[0m</span></td><td>重置</td><td>-</td><td>恢复默认</td></tr>
+            </table>
+
+            <h3>1.2 彩色主菜单演示</h3>
+            <div class="code-block">
+                <code>========================================
+              通讯录管理系统 v1.0           
+========================================
+
+程序启动中...
+正在加载联系人数据...
+加载完成！当前共 5 位联系人
+
+***************************
+*****  1. 添加联系人  *****
+*****  2. 显示联系人  *****
+*****  3. 删除联系人  *****
+*****  4. 查找联系人  *****
+*****  5. 修改联系人  *****
+*****  6. 清空联系人  *****
+*****  7. 模糊搜索    *****
+*****  0. 退出通讯录  *****
+***************************
+
+请选择操作: </code>
+            </div>
+
+            <div class="note">
+                <strong>颜色方案说明</strong>:
+                <ul>
+                    <li><span style="color:#007BFF;">蓝色背景白色文字</span>: 标题边框，突出显示</li>
+                    <li><span style="color:#007BFF;">蓝色文字</span>: 系统名称和版本信息</li>
+                    <li><span style="color:#FFC107;">黄色文字</span>: 系统状态提示</li>
+                    <li><span style="color:#28A745;">绿色文字</span>: 成功提示和菜单选项编号</li>
+                    <li><span style="color:#DC3545;">红色文字</span>: 退出选项（特殊标记）</li>
+                    <li><span style="color:#17A2B8;">青色文字</span>: 用户输入提示</li>
+                </ul>
+            </div>
+
+            <h3>1.3 彩色联系人信息显示</h3>
+            <div class="code-block">
+                <code>第1个联系人信息如下: 
+----------------------------------------
+姓  名: 张三
+性  别: 男
+年  龄: 30
+电  话: 13812345678
+家庭住址: 北京市海淀区
+----------------------------------------</code>
+            </div>
+
+            <h3>1.4 彩色操作反馈</h3>
+            <div class="tip">
+                <strong>成功提示</strong>: <span style="color:#28A745;">添加成功!</span>
+            </div>
+            <div class="warning">
+                <strong>错误提示</strong>: <span style="color:#DC3545;">通讯录已满</span>
+            </div>
+            <div class="warning">
+                <strong>警告提示</strong>: <span style="color:#DC3545;">姓名不能为空! 请重新输入:</span>
+            </div>
+
+            <h3>1.5 表格格式化显示</h3>
+            <div class="code-block">
+                <code>┌──────┬────────┬──────┬─────────────┬──────────────┐
+│ 序号 │  姓名  │ 性别 │    电话     │    地址      │
+├──────┼────────┼──────┼─────────────┼──────────────┤
+│  1   │ 张三  │ 男   │13812345678│北京市海淀区│
+│  2   │ 李四  │ 女   │13987654321│上海市浦东新区│
+│  3   │ 王五  │ 男   │13711112222│广州市天河区│
+└──────┴────────┴──────┴─────────────┴──────────────┘
+
+共 3 位联系人</code>
+            </div>
+        </div>
+
+        <div class="section" id="demo2">
+            <h2>二、图形用户界面(GUI)原型设计</h2>
+            
+            <h3>2.1 GUI设计概述</h3>
+            <p><strong>设计目标</strong>: 提供直观、易用的图形化界面，替代命令行交互方式。</p>
+            <p><strong>设计原则</strong>:</p>
+            <ul>
+                <li>简洁清晰的布局</li>
+                <li>直观的操作流程</li>
+                <li>美观的视觉效果</li>
+                <li>响应式设计</li>
+            </ul>
+
+            <h3>2.2 界面布局设计</h3>
+
+            <h4>2.2.1 主窗口布局</h4>
+            <div class="code-block" style="font-size:12px;">
+                <code>┌──────────────────────────────────────────────────────┐
+│  ┌───────────────────┐  ┌──────────────────────────┐ │
+│  │     导航面板       │  │        内容区域           │ │
+│  │                   │  │                          │ │
+│  │  [添加联系人]     │  │                          │ │
+│  │  [显示联系人]     │  │                          │ │
+│  │  [删除联系人]     │  │                          │ │
+│  │  [查找联系人]     │  │                          │ │
+│  │  [修改联系人]     │  │                          │ │
+│  │  [清空联系人]     │  │                          │ │
+│  │  [模糊搜索]       │  │                          │ │
+│  │                   │  │                          │ │
+│  └───────────────────┘  └──────────────────────────┘ │
+│                                                      │
+│  ┌──────────────────────────────────────────────────┐│
+│  │ 状态栏: 当前联系人数量: 5 / 1000  |  数据已保存   ││
+│  └──────────────────────────────────────────────────┘│
+└──────────────────────────────────────────────────────┘</code>
+            </div>
+
+            <div class="note">
+                <strong>布局说明</strong>:
+                <ul>
+                    <li><strong>左侧导航面板</strong>: 垂直排列的功能按钮，点击切换右侧内容区域</li>
+                    <li><strong>右侧内容区域</strong>: 根据选择的功能显示对应的操作界面</li>
+                    <li><strong>底部状态栏</strong>: 显示当前联系人数量和数据保存状态</li>
+                </ul>
+            </div>
+
+            <h4>2.2.2 添加/修改联系人界面</h4>
+            <div class="code-block" style="font-size:12px;">
+                <code>┌──────────────────────────────────────────────────────┐
+│  标题栏: 添加联系人 / 修改联系人                      │
+├──────────────────────────────────────────────────────┤
+│                                                      │
+│  ┌────────────────────────────────────────────────┐  │
+│  │ 姓名: [____________________________]           │  │
+│  │ 性别: [男]  [女]                              │  │
+│  │ 年龄: [________]  (1-150)                     │  │
+│  │ 电话: [____________________________]           │  │
+│  │ 地址: [____________________________]           │  │
+│  └────────────────────────────────────────────────┘  │
+│                                                      │
+│              [确定]         [取消]                    │
+│                                                      │
+└──────────────────────────────────────────────────────┘</code>
+            </div>
+
+            <h4>2.2.3 联系人列表界面</h4>
+            <div class="code-block" style="font-size:12px;">
+                <code>┌──────────────────────────────────────────────────────┐
+│  标题栏: 联系人列表                                   │
+├──────────────────────────────────────────────────────┤
+│                                                      │
+│  搜索框: [____________________________] [搜索]      │
+│                                                      │
+│  ┌────────────────────────────────────────────────┐  │
+│  │ 序号 | 姓名 | 性别 | 年龄 | 电话 | 地址       │  │
+│  ├────────────────────────────────────────────────┤  │
+│  │  1   | 张三 | 男   |  30  |138...|北京市...   │  │
+│  │  2   | 李四 | 女   |  28  |139...|上海市...   │  │
+│  │  3   | 王五 | 男   |  35  |137...|广州市...   │  │
+│  └────────────────────────────────────────────────┘  │
+│                                                      │
+│              [删除选中]     [修改选中]                │
+│                                                      │
+└──────────────────────────────────────────────────────┘</code>
+            </div>
+
+            <h3>2.3 视觉组件设计</h3>
+
+            <h4>2.3.1 颜色方案</h4>
+            <table class="table">
+                <tr><th>组件</th><th>颜色</th><th>显示</th><th>用途</th></tr>
+                <tr><td>主色调</td><td>#4A90D9</td><td><span class="color-box" style="background:#4A90D9;"></span></td><td>标题栏、按钮、导航面板背景</td></tr>
+                <tr><td>辅助色</td><td>#5CB85C</td><td><span class="color-box" style="background:#5CB85C;"></span></td><td>成功提示、确定按钮</td></tr>
+                <tr><td>警告色</td><td>#F0AD4E</td><td><span class="color-box" style="background:#F0AD4E;"></span></td><td>警告信息</td></tr>
+                <tr><td>错误色</td><td>#D9534F</td><td><span class="color-box" style="background:#D9534F;"></span></td><td>错误提示、删除按钮</td></tr>
+                <tr><td>背景色</td><td>#F8F9FA</td><td><span class="color-box" style="background:#F8F9FA;"></span></td><td>主窗口背景</td></tr>
+                <tr><td>文字色</td><td>#333333</td><td><span class="color-box" style="background:#333333;"></span></td><td>主要文字</td></tr>
+                <tr><td>边框色</td><td>#E9ECEF</td><td><span class="color-box" style="background:#E9ECEF;"></span></td><td>控件边框</td></tr>
+            </table>
+
+            <h4>2.3.2 图标设计</h4>
+            <table class="table">
+                <tr><th>功能</th><th>图标描述</th><th>用途</th></tr>
+                <tr><td>添加</td><td>加号(+)</td><td>添加联系人按钮</td></tr>
+                <tr><td>删除</td><td>垃圾桶</td><td>删除联系人按钮</td></tr>
+                <tr><td>修改</td><td>铅笔</td><td>修改联系人按钮</td></tr>
+                <tr><td>查找</td><td>放大镜</td><td>查找/搜索按钮</td></tr>
+                <tr><td>显示</td><td>列表</td><td>显示联系人按钮</td></tr>
+                <tr><td>清空</td><td>清空图标</td><td>清空联系人按钮</td></tr>
+                <tr><td>保存</td><td>保存图标</td><td>保存数据提示</td></tr>
+            </table>
+
+            <h4>2.3.3 按钮样式</h4>
+            <div class="tip">
+                <strong>主按钮样式</strong>:
+                <ul>
+                    <li>背景色: #4A90D9</li>
+                    <li>文字色: #FFFFFF</li>
+                    <li>圆角: 4px</li>
+                    <li>悬停效果: 背景色变深</li>
+                </ul>
+            </div>
+            <div class="note">
+                <strong>次按钮样式</strong>:
+                <ul>
+                    <li>背景色: #FFFFFF</li>
+                    <li>文字色: #4A90D9</li>
+                    <li>边框: 1px solid #4A90D9</li>
+                    <li>圆角: 4px</li>
+                </ul>
+            </div>
+            <div class="warning">
+                <strong>危险按钮样式</strong>:
+                <ul>
+                    <li>背景色: #D9534F</li>
+                    <li>文字色: #FFFFFF</li>
+                    <li>圆角: 4px</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="demo3">
+            <h2>三、界面交互流程图</h2>
+            
+            <h3>3.1 系统启动流程</h3>
+            <div class="flowchart">
+                <div class="flow-step">用户运行程序</div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">设置UTF-8编码</div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">加载联系人数据（从文件读取）</div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">显示主菜单界面</div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step" style="background:#F0AD4E;">用户选择操作</div>
+            </div>
+
+            <h3>3.2 添加联系人流程</h3>
+            <div class="flowchart">
+                <div class="flow-step">用户选择"添加联系人"(输入1)</div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">检查通讯录是否已满(Size &gt;= 1000?)</div>
+                <div class="flow-arrow">▼</div>
+                <div style="display:flex; justify-content:center;">
+                    <div style="background:#D9534F; color:white; padding:10px; border-radius:6px; margin:0 10px;">是 → 提示"通讯录已满" → 返回主菜单</div>
+                </div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">输入姓名(非空)</div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">输入性别(1/2)</div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">输入年龄(1-150)</div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">输入电话号码</div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">输入家庭住址</div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">添加到数组 Size++</div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step" style="background:#5CB85C;">保存到文件</div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">返回主菜单</div>
+            </div>
+
+            <h3>3.3 删除联系人流程</h3>
+            <div class="flowchart">
+                <div class="flow-step">用户选择"删除联系人"(输入3)</div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">检查通讯录是否为空(Size == 0?)</div>
+                <div class="flow-arrow">▼</div>
+                <div style="display:flex; justify-content:center;">
+                    <div style="background:#D9534F; color:white; padding:10px; border-radius:6px; margin:0 10px;">是 → 提示"无法删除" → 返回主菜单</div>
+                </div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">输入要删除的联系人姓名</div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">查找联系人索引(findPersonIndex)</div>
+                <div class="flow-arrow">▼</div>
+                <div style="display:flex; justify-content:center;">
+                    <div style="background:#D9534F; color:white; padding:10px; border-radius:6px; margin:0 10px;">返回-1 → 提示"查无此人" → 返回主菜单</div>
+                </div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">数组元素前移(覆盖被删项)</div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">Size--</div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step" style="background:#5CB85C;">保存到文件</div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">返回主菜单</div>
+            </div>
+
+            <h3>3.4 模糊搜索流程</h3>
+            <div class="flowchart">
+                <div class="flow-step">用户选择"模糊搜索"(输入7)</div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">检查通讯录是否为空(Size == 0?)</div>
+                <div class="flow-arrow">▼</div>
+                <div style="display:flex; justify-content:center;">
+                    <div style="background:#D9534F; color:white; padding:10px; border-radius:6px; margin:0 10px;">是 → 提示"无法搜索" → 返回主菜单</div>
+                </div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">输入搜索关键字</div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">遍历所有联系人，使用find()匹配</div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">显示匹配结果(数量+列表)</div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step">返回主菜单</div>
+            </div>
+
+            <h3>3.5 完整交互流程</h3>
+            <div class="code-block" style="font-size:10px;">
+                <code>                    ┌─────────────┐
+                    │   主菜单    │
+                    └─────────────┘
+                         │
+         ┌───────────────┼───────────────┬───────────────┐
+         ▼               ▼               ▼               ▼
+   ┌─────────┐     ┌─────────┐     ┌─────────┐     ┌─────────┐
+   │ 添加    │     │ 显示    │     │ 删除    │     │ 查找    │
+   │ 联系人  │     │ 联系人  │     │ 联系人  │     │ 联系人  │
+   └─────────┘     └─────────┘     └─────────┘     └─────────┘
+         │               │               │               │
+         ▼               ▼               ▼               ▼
+   ┌─────────┐     ┌─────────┐     ┌─────────┐     ┌─────────┐
+   │ 输入    │     │ 遍历    │     │ 输入    │     │ 输入    │
+   │ 验证    │     │ 显示    │     │ 查找    │     │ 查找    │
+   │ 保存    │     │ 返回    │     │ 删除    │     │ 显示    │
+   └─────────┘     └─────────┘     └─────────┘     └─────────┘
+         │               │               │               │
+         └───────────────┴───────────────┴───────────────┘
+                         │
+                         ▼
+         ┌───────────────┼───────────────┬───────────────┐
+         ▼               ▼               ▼               ▼
+   ┌─────────┐     ┌─────────┐     ┌─────────┐     ┌─────────┐
+   │ 修改    │     │ 清空    │     │ 搜索    │     │ 退出    │
+   │ 联系人  │     │ 联系人  │     │ (模糊)  │     │ 系统    │
+   └─────────┘     └─────────┘     └─────────┘     └─────────┘
+         │               │               │               │
+         ▼               ▼               ▼               ▼
+   ┌─────────┐     ┌─────────┐     ┌─────────┐     ┌─────────┐
+   │ 查找    │     │ 确认    │     │ 输入    │     │ 保存    │
+   │ 输入    │     │ 清空    │     │ 匹配    │     │ 退出    │
+   │ 保存    │     │ 保存    │     │ 显示    │     │ 程序    │
+   └─────────┘     └─────────┘     └─────────┘     └─────────┘
+         │               │               │               │
+         └───────────────┴───────────────┴───────────────┘
+                         │
+                         ▼
+                    ┌─────────────┐
+                    │   主菜单    │
+                    └─────────────┘</code>
+            </div>
+        </div>
+
+        <div class="section" id="demo4">
+            <h2>四、用户体验优化建议</h2>
+            
+            <h3>4.1 CLI界面优化建议</h3>
+            <ol>
+                <li><strong>颜色区分</strong>: 使用不同颜色区分系统提示、用户输入、错误信息</li>
+                <li><strong>进度指示</strong>: 在加载大量数据时显示进度条</li>
+                <li><strong>确认对话框</strong>: 在删除、清空等危险操作前添加确认提示</li>
+                <li><strong>快捷键支持</strong>: 支持键盘快捷键快速操作</li>
+                <li><strong>分页显示</strong>: 当联系人数量较多时支持分页浏览</li>
+            </ol>
+
+            <h3>4.2 GUI界面优化建议</h3>
+            <ol>
+                <li><strong>拖拽排序</strong>: 支持拖拽调整联系人顺序</li>
+                <li><strong>批量操作</strong>: 支持批量删除、导出联系人</li>
+                <li><strong>数据导出</strong>: 支持导出为Excel、CSV等格式</li>
+                <li><strong>数据导入</strong>: 支持从Excel、CSV导入联系人</li>
+                <li><strong>搜索高亮</strong>: 在搜索结果中高亮显示匹配的关键字</li>
+                <li><strong>自动保存提示</strong>: 在数据变更时显示保存状态图标</li>
+                <li><strong>快捷键支持</strong>: 支持常用快捷键（Ctrl+S保存，Ctrl+N新建等）</li>
+            </ol>
+
+            <h3>4.3 通用优化建议</h3>
+            <ol>
+                <li><strong>输入验证</strong>: 在输入时实时验证，给出即时反馈</li>
+                <li><strong>错误处理</strong>: 提供清晰的错误提示和解决方案</li>
+                <li><strong>帮助文档</strong>: 提供详细的帮助文档和操作指南</li>
+                <li><strong>响应速度</strong>: 优化数据加载和查询速度</li>
+                <li><strong>数据备份</strong>: 定期自动备份联系人数据</li>
+            </ol>
+
+            <div class="btn-group" style="text-align:center;">
+                <a href="web_demo.html" target="_blank" class="btn btn-success">🚀 在线演示系统</a>
+                <a href="data_demo.html" class="btn btn-primary">📊 数据演示</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

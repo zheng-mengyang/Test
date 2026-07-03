@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通讯录管理系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4A90D9 0%, #2563EB 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .menu {
+            background: #f8f9fa;
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .menu .menu-title {
+            text-align: center;
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .menu-btn {
+            padding: 12px 8px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .menu-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn-add { background: #5CB85C; }
+        .btn-show { background: #4A90D9; }
+        .btn-delete { background: #D9534F; }
+        .btn-find { background: #5BC0DE; }
+        .btn-modify { background: #F0AD4E; }
+        .btn-clear { background: #9E9E9E; }
+        .btn-search { background: #667eea; }
+        .btn-exit { background: #2C3E50; }
+
+        .content {
+            padding: 20px;
+        }
+
+        .section-title {
+            color: #4A90D9;
+            font-size: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #4A90D9;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #495057;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #4A90D9;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.1);
+        }
+
+        .form-group .radio-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-group .radio-group label {
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #4A90D9;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #357abd;
+        }
+
+        .btn-danger {
+            background: #D9534F;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c9302c;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .contact-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .contact-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #4A90D9;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .contact-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .contact-item h4 {
+            color: #4A90D9;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            font-size: 14px;
+            color: #495057;
+        }
+
+        .contact-info span {
+            font-weight: bold;
+            color: #212529;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .contact-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .contact-table th,
+        .contact-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .contact-table th {
+            background: #4A90D9;
+            color: white;
+            font-weight: bold;
+        }
+
+        .contact-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .contact-table tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+
+        .message {
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .message.warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .search-box input:focus {
+            border-color: #4A90D9;
+            outline: none;
+        }
+
+        .stats-bar {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4A90D9;
+        }
+
+        .stat-item .stat-label {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .modal h3 {
+            color: #4A90D9;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .modal p {
+            color: #495057;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .modal .btn-group {
+            justify-content: flex-end;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-table th,
+            .contact-table td {
+                padding: 8px 5px;
+                font-size: 12px;
+            }
+
+            .stats-bar {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📒 通讯录管理系统</h1>
+            <p>Contact Management System v1.0</p>
+        </div>
+
+        <div class="menu">
+            <div class="menu-title">请选择操作</div>
+            <div class="menu-grid">
+                <button class="menu-btn btn-add" onclick="showAddForm()">添加联系人</button>
+                <button class="menu-btn btn-show" onclick="showContacts()">显示联系人</button>
+                <button class="menu-btn btn-delete" onclick="showDeleteForm()">删除联系人</button>
+                <button class="menu-btn btn-find" onclick="showFindForm()">查找联系人</button>
+                <button class="menu-btn btn-modify" onclick="showModifyForm()">修改联系人</button>
+                <button class="menu-btn btn-clear" onclick="confirmClear()">清空联系人</button>
+                <button class="menu-btn btn-search" onclick="showSearchForm()">模糊搜索</button>
+                <button class="menu-btn btn-exit" onclick="exitSystem()">退出系统</button>
+            </div>
+        </div>
+
+        <div class="content">
+            <div id="stats-bar" class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value" id="total-count">0</div>
+                    <div class="stat-label">总人数</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="male-count">0</div>
+                    <div class="stat-label">男性</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="female-count">0</div>
+                    <div class="stat-label">女性</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="max-capacity">1000</div>
+                    <div class="stat-label">最大容量</div>
+                </div>
+            </div>
+
+            <div id="message-area"></div>
+
+            <div id="add-section" class="hidden">
+                <h2 class="section-title">添加联系人</h2>
+                <form id="add-form" onsubmit="addContact(event)">
+                    <div class="form-group">
+                        <label for="add-name">姓名 <span style="color:red;">*</span></label>
+                        <input type="text" id="add-name" placeholder="请输入姓名" required>
+                    </div>
+                    <div class="form-group">
+                        <label>性别 <span style="color:red;">*</span></label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="add-sex" value="1" checked> 男</label>
+                            <label><input type="radio" name="add-sex" value="2"> 女</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-age">年龄 <span style="color:red;">*</span></label>
+                        <input type="number" id="add-age" placeholder="请输入年龄(1-150)" min="1" max="150" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-phone">联系电话</label>
+                        <input type="text" id="add-phone" placeholder="请输入联系电话">
+                    </div>
+                    <div class="form-group">
+                        <label for="add-address">家庭住址</label>
+                        <input type="text" id="add-address" placeholder="请输入家庭住址">
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">确认添加</button>
+                        <button type="button" class="btn btn-secondary" onclick="hideAllSections()">取消</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="show-section" class="hidden">
+                <h2 class="section-title">联系人列表</h2>
+                <div id="contact-list" class="contact-list"></div>
+            </div>
+
+            <div id="delete-section" class="hidden">
+                <h2 class="section-title">删除联系人</h2>
+                <div class="form-group">
+                    <label for="delete-name">请输入要删除的联系人姓名</label>
+                    <input type="text" id="delete-name" placeholder="请输入姓名">
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-danger" onclick="deleteContact()">确认删除</button>
+                    <button class="btn btn-secondary" onclick="hideAllSections()">取消</button>
+                </div>
+            </div>
+
+            <div id="find-section" class="hidden">
+                <h2 class="section-title">查找联系人</h2>
+                <div class="form-group">
+                    <label for="find-name">请输入要查找的联系人姓名</label>
+                    <input type="text" id="find-name" placeholder="请输入姓名">
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="findContact()">查找</button>
+                    <button class="btn btn-secondary" onclick="hideAllSections()">取消</button>
+                </div>
+                <div id="find-result"></div>
+            </div>
+
+            <div id="modify-section" class="hidden">
+                <h2 class="section-title">修改联系人</h2>
+                <div class="form-group">
+                    <label for="modify-search-name">请输入要修改的联系人姓名</label>
+                    <input type="text" id="modify-search-name" placeholder="请输入姓名">
+                    <button class="btn btn-primary" style="margin-top:10px;" onclick="searchModifyContact()">查找</button>
+                </div>
+                <form id="modify-form" onsubmit="modifyContact(event)" class="hidden">
+                    <input type="hidden" id="modify-index">
+                    <div class="form-group">
+                        <label for="modify-name">姓名 <span style="color:red;">*</span></label>
+                        <input type="text" id="modify-name" placeholder="请输入姓名" required>
+                    </div>
+                    <div class="form-group">
+                        <label>性别 <span style="color:red;">*</span></label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="modify-sex" value="1"> 男</label>
+                            <label><input type="radio" name="modify-sex" value="2"> 女</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="modify-age">年龄 <span style="color:red;">*</span></label>
+                        <input type="number" id="modify-age" placeholder="请输入年龄(1-150)" min="1" max="150" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modify-phone">联系电话</label>
+                        <input type="text" id="modify-phone" placeholder="请输入联系电话">
+                    </div>
+                    <div class="form-group">
+                        <label for="modify-address">家庭住址</label>
+                        <input type="text" id="modify-address" placeholder="请输入家庭住址">
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">确认修改</button>
+                        <button type="button" class="btn btn-secondary" onclick="hideAllSections()">取消</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="search-section" class="hidden">
+                <h2 class="section-title">模糊搜索</h2>
+                <div class="search-box">
+                    <input type="text" id="search-keyword" placeholder="请输入搜索关键字">
+                    <button class="btn btn-primary" onclick="searchContacts()">搜索</button>
+                </div>
+                <div id="search-result"></div>
+            </div>
+
+            <div id="welcome-section">
+                <h2 class="section-title">欢迎使用通讯录管理系统</h2>
+                <div style="text-align: center; padding: 40px 20px; color: #6c757d;">
+                    <p style="font-size: 16px; margin-bottom: 20px;">
+                        本系统支持联系人的添加、显示、删除、查找、修改、清空和模糊搜索功能。
+                    </p>
+                    <p style="font-size: 14px;">
+                        数据自动保存到本地存储，刷新页面后数据不会丢失。
+                    </p>
+                    <div style="margin-top: 30px;">
+                        <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=contact%20management%20system%20illustration%20with%20phone%20and%20address%20book%20icons%20clean%20minimal%20style&image_size=square" alt="通讯录图标" style="width: 150px; border-radius: 12px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="confirm-modal">
+            <div class="modal">
+                <h3>确认操作</h3>
+                <p id="confirm-message">确定要执行此操作吗？</p>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="confirmAction()">确定</button>
+                    <button class="btn btn-secondary" onclick="cancelAction()">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const MAX_CAPACITY = 1000;
+        const DATA_KEY = 'contact_list';
+        
+        let contacts = [];
+        let pendingAction = null;
+
+        function init() {
+            loadFromStorage();
+            updateStats();
+        }
+
+        function loadFromStorage() {
+            const data = localStorage.getItem(DATA_KEY);
+            if (data) {
+                contacts = JSON.parse(data);
+            } else {
+                contacts = [
+                    { name: '张伟', sex: 1, age: 32, phone: '13800138001', address: '北京市朝阳区建国路88号' },
+                    { name: '张丽', sex: 2, age: 28, phone: '13800138002', address: '北京市海淀区中关村大街1号' },
+                    { name: '王强', sex: 1, age: 35, phone: '13900139001', address: '上海市浦东新区陆家嘴环路100号' },
+                    { name: '李娜', sex: 2, age: 26, phone: '13900139002', address: '上海市静安区南京西路1266号' },
+                    { name: '刘芳', sex: 2, age: 40, phone: '13700137001', address: '广州市天河区珠江新城花城大道' },
+                    { name: '陈明', sex: 1, age: 30, phone: '13700137002', address: '深圳市南山区科技园路88号' },
+                    { name: '张建国', sex: 1, age: 55, phone: '13600136001', address: '成都市锦江区春熙路步行街' },
+                    { name: '张婷婷', sex: 2, age: 23, phone: '13600136002', address: '杭州市西湖区文三路478号' },
+                    { name: '赵磊', sex: 1, age: 29, phone: '13500135001', address: '武汉市武昌区中南路99号' },
+                    { name: '孙丽', sex: 2, age: 31, phone: '13500135002', address: '南京市鼓楼区中山北路201号' }
+                ];
+                saveToStorage();
+            }
+        }
+
+        function saveToStorage() {
+            localStorage.setItem(DATA_KEY, JSON.stringify(contacts));
+            updateStats();
+        }
+
+        function updateStats() {
+            const total = contacts.length;
+            const male = contacts.filter(c => c.sex === 1).length;
+            const female = contacts.filter(c => c.sex === 2).length;
+            
+            document.getElementById('total-count').textContent = total;
+            document.getElementById('male-count').textContent = male;
+            document.getElementById('female-count').textContent = female;
+        }
+
+        function hideAllSections() {
+            document.getElementById('add-section').classList.add('hidden');
+            document.getElementById('show-section').classList.add('hidden');
+            document.getElementById('delete-section').classList.add('hidden');
+            document.getElementById('find-section').classList.add('hidden');
+            document.getElementById('modify-section').classList.add('hidden');
+            document.getElementById('search-section').classList.add('hidden');
+            document.getElementById('welcome-section').classList.remove('hidden');
+            document.getElementById('message-area').innerHTML = '';
+            document.getElementById('find-result').innerHTML = '';
+            document.getElementById('search-result').innerHTML = '';
+            document.getElementById('modify-form').classList.add('hidden');
+        }
+
+        function showMessage(message, type) {
+            const area = document.getElementById('message-area');
+            area.innerHTML = `<div class="message ${type}">${message}</div>`;
+            setTimeout(() => {
+                area.innerHTML = '';
+            }, 3000);
+        }
+
+        function showAddForm() {
+            hideAllSections();
+            document.getElementById('add-section').classList.remove('hidden');
+            document.getElementById('add-form').reset();
+        }
+
+        function addContact(event) {
+            event.preventDefault();
+            
+            if (contacts.length >= MAX_CAPACITY) {
+                showMessage('通讯录已满！最大容量为1000人', 'error');
+                return;
+            }
+
+            const name = document.getElementById('add-name').value.trim();
+            const sex = parseInt(document.querySelector('input[name="add-sex"]:checked').value);
+            const age = parseInt(document.getElementById('add-age').value);
+            const phone = document.getElementById('add-phone').value.trim();
+            const address = document.getElementById('add-address').value.trim();
+
+            if (!name) {
+                showMessage('姓名不能为空！', 'error');
+                return;
+            }
+
+            if (age < 1 || age > 150) {
+                showMessage('年龄输入有误(1-150)！', 'error');
+                return;
+            }
+
+            contacts.push({ name, sex, age, phone, address });
+            saveToStorage();
+            showMessage('添加成功！', 'success');
+            document.getElementById('add-form').reset();
+        }
+
+        function showContacts() {
+            hideAllSections();
+            document.getElementById('show-section').classList.remove('hidden');
+            
+            const list = document.getElementById('contact-list');
+            
+            if (contacts.length === 0) {
+                list.innerHTML = '<div style="text-align:center; padding:40px; color:#6c757d;">当前记录为空</div>';
+                return;
+            }
+
+            let html = '<table class="contact-table"><thead><tr><th>序号</th><th>姓名</th><th>性别</th><th>年龄</th><th>电话</th><th>地址</th></tr></thead><tbody>';
+            contacts.forEach((c, index) => {
+                html += `<tr>
+                    <td>${index + 1}</td>
+                    <td>${c.name}</td>
+                    <td>${c.sex === 1 ? '男' : '女'}</td>
+                    <td>${c.age}</td>
+                    <td>${c.phone || '-'}</td>
+                    <td>${c.address || '-'}</td>
+                </tr>`;
+            });
+            html += '</tbody></table>';
+            list.innerHTML = html;
+        }
+
+        function showDeleteForm() {
+            hideAllSections();
+            document.getElementById('delete-section').classList.remove('hidden');
+            document.getElementById('delete-name').value = '';
+        }
+
+        function deleteContact() {
+            const name = document.getElementById('delete-name').value.trim();
+            
+            if (!name) {
+                showMessage('请输入要删除的联系人姓名！', 'error');
+                return;
+            }
+
+            const index = findContactIndex(name);
+            
+            if (index === -1) {
+                showMessage('查无此人！', 'error');
+                return;
+            }
+
+            contacts.splice(index, 1);
+            saveToStorage();
+            showMessage('删除成功！', 'success');
+            document.getElementById('delete-name').value = '';
+        }
+
+        function showFindForm() {
+            hideAllSections();
+            document.getElementById('find-section').classList.remove('hidden');
+            document.getElementById('find-name').value = '';
+            document.getElementById('find-result').innerHTML = '';
+        }
+
+        function findContact() {
+            const name = document.getElementById('find-name').value.trim();
+            
+            if (!name) {
+                showMessage('请输入要查找的联系人姓名！', 'error');
+                return;
+            }
+
+            const index = findContactIndex(name);
+            const result = document.getElementById('find-result');
+            
+            if (index === -1) {
+                result.innerHTML = '<div style="text-align:center; padding:20px; color:#dc3545;">查无此人</div>';
+                return;
+            }
+
+            const c = contacts[index];
+            result.innerHTML = `
+                <div class="contact-item">
+                    <h4>${c.name}</h4>
+                    <div class="contact-info">
+                        <div><span>性别:</span> ${c.sex === 1 ? '男' : '女'}</div>
+                        <div><span>年龄:</span> ${c.age}</div>
+                        <div><span>电话:</span> ${c.phone || '-'}</div>
+                        <div><span>地址:</span> ${c.address || '-'}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showModifyForm() {
+            hideAllSections();
+            document.getElementById('modify-section').classList.remove('hidden');
+            document.getElementById('modify-search-name').value = '';
+            document.getElementById('modify-form').classList.add('hidden');
+        }
+
+        function searchModifyContact() {
+            const name = document.getElementById('modify-search-name').value.trim();
+            
+            if (!name) {
+                showMessage('请输入要修改的联系人姓名！', 'error');
+                return;
+            }
+
+            const index = findContactIndex(name);
+            
+            if (index === -1) {
+                showMessage('查无此人！', 'error');
+                return;
+            }
+
+            const c = contacts[index];
+            document.getElementById('modify-index').value = index;
+            document.getElementById('modify-name').value = c.name;
+            document.querySelector(`input[name="modify-sex"][value="${c.sex}"]`).checked = true;
+            document.getElementById('modify-age').value = c.age;
+            document.getElementById('modify-phone').value = c.phone;
+            document.getElementById('modify-address').value = c.address;
+            document.getElementById('modify-form').classList.remove('hidden');
+        }
+
+        function modifyContact(event) {
+            event.preventDefault();
+            
+            const index = parseInt(document.getElementById('modify-index').value);
+            const name = document.getElementById('modify-name').value.trim();
+            const sex = parseInt(document.querySelector('input[name="modify-sex"]:checked').value);
+            const age = parseInt(document.getElementById('modify-age').value);
+            const phone = document.getElementById('modify-phone').value.trim();
+            const address = document.getElementById('modify-address').value.trim();
+
+            if (!name) {
+                showMessage('姓名不能为空！', 'error');
+                return;
+            }
+
+            if (age < 1 || age > 150) {
+                showMessage('年龄输入有误(1-150)！', 'error');
+                return;
+            }
+
+            contacts[index] = { name, sex, age, phone, address };
+            saveToStorage();
+            showMessage('修改成功！', 'success');
+            hideAllSections();
+        }
+
+        function confirmClear() {
+            if (contacts.length === 0) {
+                showMessage('当前记录为空，无需清空！', 'warning');
+                return;
+            }
+            
+            pendingAction = 'clear';
+            document.getElementById('confirm-message').textContent = '确定要清空通讯录吗？此操作不可恢复！';
+            document.getElementById('confirm-modal').style.display = 'flex';
+        }
+
+        function showSearchForm() {
+            hideAllSections();
+            document.getElementById('search-section').classList.remove('hidden');
+            document.getElementById('search-keyword').value = '';
+            document.getElementById('search-result').innerHTML = '';
+        }
+
+        function searchContacts() {
+            const keyword = document.getElementById('search-keyword').value.trim();
+            
+            if (!keyword) {
+                showMessage('请输入搜索关键字！', 'error');
+                return;
+            }
+
+            const results = contacts.filter(c => c.name.includes(keyword));
+            const resultDiv = document.getElementById('search-result');
+            
+            if (results.length === 0) {
+                resultDiv.innerHTML = '<div style="text-align:center; padding:20px; color:#dc3545;">未找到匹配的联系人</div>';
+                return;
+            }
+
+            let html = `<div style="margin-bottom:15px; color:#4A90D9; font-weight:bold;">共找到 ${results.length} 个匹配的联系人</div>`;
+            results.forEach((c, index) => {
+                html += `
+                    <div class="contact-item">
+                        <h4>${index + 1}. ${c.name}</h4>
+                        <div class="contact-info">
+                            <div><span>性别:</span> ${c.sex === 1 ? '男' : '女'}</div>
+                            <div><span>年龄:</span> ${c.age}</div>
+                            <div><span>电话:</span> ${c.phone || '-'}</div>
+                            <div><span>地址:</span> ${c.address || '-'}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            resultDiv.innerHTML = html;
+        }
+
+        function exitSystem() {
+            pendingAction = 'exit';
+            document.getElementById('confirm-message').textContent = '确定要退出系统吗？';
+            document.getElementById('confirm-modal').style.display = 'flex';
+        }
+
+        function confirmAction() {
+            if (pendingAction === 'clear') {
+                contacts = [];
+                saveToStorage();
+                showMessage('通讯录已清空！', 'success');
+                hideAllSections();
+            } else if (pendingAction === 'exit') {
+                alert('欢迎下次使用！');
+            }
+            cancelAction();
+        }
+
+        function cancelAction() {
+            document.getElementById('confirm-modal').style.display = 'none';
+            pendingAction = null;
+        }
+
+        function findContactIndex(name) {
+            return contacts.findIndex(c => c.name === name);
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
